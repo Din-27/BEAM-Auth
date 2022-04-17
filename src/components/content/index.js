@@ -6,6 +6,7 @@ import FacebookLogin from 'react-facebook-login';
 import axios from 'axios'
 import './style-right.css'
 import Home from '../pages/Home';
+import Register from '../pages/Register';
 
 
 
@@ -17,7 +18,10 @@ function Content() {
         email : "",
         password : ""
     })
+
     const [loginData, setLoginData] = useState(false)
+    const [trigger, setTrigger] = useState(false)
+    const [forgot, setForgot] = useState(false)
 
     const [loginDataUser, setLoginDataUser] = useState(
         localStorage.getItem('loginDataUser') ?
@@ -113,6 +117,10 @@ function Content() {
         setLoginDataUser(null)
         setLoginData(false)
     }
+
+    const handleForgot = () => {
+
+    }
     // useEffect((data)=> {
     //     if(loginDataGo.name === data.name){
     //         setLoginData(true)
@@ -127,88 +135,137 @@ function Content() {
             <div className="container-fluid col-md-6">
                 <img className='img-fluid image-side-right' src={RightContent} alt="RightContent" />
             </div>
-            <div className="col-md-6">
-            {loginData ? (
-                <div className="row">
-                    <div className="col-10 mt-4 d-grid mx-auto">
-                        <div className="col-10 mt-4 d-grid mx-auto">
-                            <Home 
-                            dataGo={loginDataGo} 
-                            dataFb={loginDataFb} 
-                            dataUser={loginDataUser} 
-                            logoutGo={handleLogoutGo}
-                            logoutUser={handleLogoutUser}
-                            />
-                        </div>
-                    </div>
-                </div>
-                    ) : (
+            {trigger ? (
+                <Register 
+                trigger={()=>setTrigger(false)}
+                />
+            ) : (
+                <div className="col-md-6">
+                {loginData ? (
                     <div className="row">
                         <div className="col-10 mt-4 d-grid mx-auto">
-                            <h1 style={{color: 'red'}} className='mb-4 mt-5'>Log in to Beam Space</h1>
-                            <GoogleLogin 
-                            className='justify-content-center'
-                            clientId={client_Id}
-                            buttonText='Log in with Google'
-                            onSuccess={handleLogin}
-                            onFailure={handleFailure}
-                            cookiePolicy={'single_host_origin'}
-                            >
-                            </GoogleLogin>
-                        </div>
-                        <div className="col-10 d-grid gap-2 mx-auto">
-                            <FacebookLogin
-                            appId="3188631798042121"
-                            autoLoad={true}
-                            fields="name,email,picture"
-                            callback={handleLoginFacebook}
-                            cssClass="my-facebook-button-class mx-auto col-12 btn mt-4 btn-primary"
-                            icon="fa-facebook me-3"
-                            />
-                        </div>
-                        <div className="col-10 d-grid gap-2 mx-auto mt-2">
-                            <div className="row">
-                            <div className="col-3"><hr/></div>
-                            <div className="col-6 text-center spaning" style={{color: 'grey'}}>or login with your email</div>
-                            <div className="col-3"><hr/></div>
+                            <div className="col-10 mt-4 d-grid mx-auto">
+                                <Home 
+                                dataGo={loginDataGo} 
+                                dataFb={loginDataFb} 
+                                dataUser={loginDataUser} 
+                                logoutGo={handleLogoutGo}
+                                logoutUser={handleLogoutUser}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="col-10 d-grid gap-2 mx-auto mt-2">
-                        <Form onSubmit={handleLoginUser}>
-                            <Form.Group className="mb-3" controlId="formGroupEmail">
-                                <Form.Label className='fw-bold'>Email Address<span style={{color: 'red'}}>*</span></Form.Label>
-                                <Form.Control 
-                                style={{border: 'none'}} 
-                                className='form-control-md' 
-                                type="email" 
-                                placeholder="E.g, name@email.com" 
-                                name="email"
-                                onChange={handleChange}/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formGroupPassword">
-                                <Form.Label className='fw-bold'>Password<span style={{color: 'red'}}>*</span></Form.Label>
-                                <Form.Control 
-                                style={{border: 'none'}} 
-                                className='form-control-md' 
-                                type="password" 
-                                placeholder="Enter your password" 
-                                name="password"
-                                onChange={handleChange}/>
-                            </Form.Group>
-                            <Button 
-                            style={{backgroundColor : 'red', border : 'none'}} 
-                            className='btn mt-4 d-grid gap-2 col-12 mx-auto fw-bold py-2 btn-outline-light' 
-                            type="submit">Login</Button>
-                        </Form>
-                    </div>
-                    <div className="col-12 text-center fw-bold mt-4">
-                        <a href='#' style={{border: 'none', textDecoration: 'none'}}>Forgot Password?</a>
-                    </div>
-                    <div className="col-12 text-center fw-bold text-center mt-4">
-                        <p>Don't have an account? <a href='#' style={{border: 'none', textDecoration: 'none'}}>Create an account</a></p>
-                    </div>
-                </div>)}
-            </div>
+                        ) : (
+                        <div className="row">
+                                {forgot ? (
+                                <div className="col-10 mt-4 d-grid mx-auto">
+                                    <h1 style={{color: 'red'}} className='mb-4 mt-5'>Reset Password</h1>
+                                </div>
+                                ) : (
+                            <>
+                            <div className="col-10 mt-4 d-grid mx-auto">
+                                <h1 style={{color: 'red'}} className='mb-4 mt-5'>Log in to Beam Space</h1>
+                                <GoogleLogin 
+                                className='justify-content-center'
+                                clientId={client_Id}
+                                buttonText='Log in with Google'
+                                onSuccess={handleLogin}
+                                onFailure={handleFailure}
+                                cookiePolicy={'single_host_origin'}
+                                >
+                                </GoogleLogin>
+                            </div>
+                            <div className="col-10 d-grid gap-2 mx-auto">
+                                <FacebookLogin
+                                appId="3188631798042121"
+                                autoLoad={true}
+                                fields="name,email,picture"
+                                callback={handleLoginFacebook}
+                                cssClass="my-facebook-button-class mx-auto col-12 btn mt-4 btn-primary"
+                                icon="fa-facebook me-3"
+                                />
+                            </div>
+                            <div className="col-10 d-grid gap-2 mx-auto mt-2">
+                                <div className="row">
+                                <div className="col-3"><hr/></div>
+                                <div className="col-6 text-center spaning" style={{color: 'grey'}}>or login with your email</div>
+                                <div className="col-3"><hr/></div>
+                            </div>
+                            </div>
+                            </>)}
+                            {forgot ? (
+                                <>
+                                    <div className="col-10 d-grid gap-2 mx-auto mt-2">
+                                    <Form>
+                                    <Form.Group className="mb-3" controlId="formGroupPasswordNew">
+                                        <Form.Label className='fw-bold'>New Password<span style={{color: 'red'}}>*</span></Form.Label>
+                                        <Form.Control 
+                                        style={{border: 'none'}} 
+                                        className='form-control-md' 
+                                        type="password" 
+                                        placeholder="Enter your new password" 
+                                        name="password"/>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formGroupPasswordRe">
+                                        <Form.Label className='fw-bold'>Re-Type Password<span style={{color: 'red'}}>*</span></Form.Label>
+                                        <Form.Control 
+                                        style={{border: 'none'}} 
+                                        className='form-control-md' 
+                                        type="password" 
+                                        placeholder="Re-type your password" 
+                                        name="password"/>
+                                    </Form.Group>
+                                    <Button 
+                                    style={{backgroundColor : 'red', border : 'none'}} 
+                                    className='btn mt-4 d-grid gap-2 col-12 mx-auto fw-bold py-2 btn-outline-light' 
+                                    type="submit">Submit</Button>
+                                </Form>
+                                </div>
+                                <div className="col-12 text-center fw-bold text-center mt-4">
+                                    <p>Remember your password? <span onClick={()=>setForgot(false)} className='text-primary' style={{border: 'none', textDecoration: 'none', cursor : 'pointer'}}>Login</span></p>
+                                </div>
+                            </>
+                            ) : 
+                            (
+                            <>
+                            <div className="col-10 d-grid gap-2 mx-auto mt-2">
+                                <Form onSubmit={handleLoginUser}>
+                                    <Form.Group className="mb-3" controlId="formGroupEmail">
+                                        <Form.Label className='fw-bold'>Email Address<span style={{color: 'red'}}>*</span></Form.Label>
+                                        <Form.Control 
+                                        style={{border: 'none'}} 
+                                        className='form-control-md' 
+                                        type="email" 
+                                        placeholder="E.g, name@email.com" 
+                                        name="email"
+                                        onChange={handleChange}/>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formGroupPassword">
+                                        <Form.Label className='fw-bold'>Password<span style={{color: 'red'}}>*</span></Form.Label>
+                                        <Form.Control 
+                                        style={{border: 'none'}} 
+                                        className='form-control-md' 
+                                        type="password" 
+                                        placeholder="Enter your password" 
+                                        name="password"
+                                        onChange={handleChange}/>
+                                    </Form.Group>
+                                    <Button 
+                                    style={{backgroundColor : 'red', border : 'none'}} 
+                                    className='btn mt-4 d-grid gap-2 col-12 mx-auto fw-bold py-2 btn-outline-light' 
+                                    type="submit">Login</Button>
+                                </Form>
+                            </div>
+                            <div className="col-12 text-center fw-bold mt-4">
+                                <span className='text-primary' onClick={()=>setForgot(true)} style={{border: 'none', textDecoration: 'none', cursor : 'pointer'}}>Forgot Password?</span>
+                            </div>
+                            <div className="col-12 text-center fw-bold text-center mt-4">
+                                <p>Don't have an account? <span onClick={()=>setTrigger(true)} className='text-primary' style={{border: 'none', textDecoration: 'none', cursor : 'pointer'}}>Create an account</span></p>
+                            </div>
+                        </>)}
+                    </div>)}
+                </div>
+            )}
         </div>
   )
 }
